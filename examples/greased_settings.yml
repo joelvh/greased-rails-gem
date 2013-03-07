@@ -1,0 +1,172 @@
+defaults: &defaults
+  config:
+    force_ssl: false
+    autoload_paths +=:
+      - "<%= Rails.root %>/lib"
+    log_level: :debug
+    time_zone: 'Eastern Time (US & Canada)'
+    encoding: 'utf-8'
+    filter_parameters +=:
+      - :password
+    active_support:
+      escape_html_entities_in_json: true
+    active_record:
+      whitelist_attributes: true
+    action_mailer:
+      default_url_options:
+        :host:            "<%= ENV['APP_HOST'] %>"
+      asset_host:         "http://<%= ENV['ASSET_HOST'] %>"
+      smtp_settings:
+        :address:         "<%= ENV['SENDGRID_SMTP'] %>"
+        :port:            "<%= ENV['SENDGRID_SMTP_PORT'] %>"
+        :authentication:  :plain
+        :user_name:       "<%= ENV['SENDGRID_USERNAME'] %>"
+        :password:        "<%= ENV['SENDGRID_PASSWORD'] %>"
+        :domain:          "<%= ENV['SENDGRID_DOMAIN'] %>"
+    action_controller:
+      asset_host: "//<%= ENV['ASSET_HOST'] %>"
+    assets:
+      precompile +=:
+        - "rails_admin.js"
+        - "rails_admin.css"
+        - "rails_admin/rails_admin.js"
+        - "rails_admin/rails_admin.css"
+        - "rails_admin/jquery.colorpicker.js"
+        - "rails_admin/jquery.colorpicker.css"
+      initialize_on_precompile: false
+      enabled: true
+      js_compressor: :closure
+      #css_compressor: :less
+      version: '1.0'
+    # if defined? ::Rack::PerftoolsProfiler
+      # config.middleware.use ::Rack::PerftoolsProfiler, :default_printer => 'gif', :bundler => true
+    # end
+    # memory profiling
+    # if defined?(Oink) && defined?(ActiveRecord)
+      # config.middleware.use Oink::Middleware, :logger => Logger.new(STDOUT)#Rails.logger
+    # end
+    # # error notifications
+    # config.middleware.use ExceptionNotifier,
+      # # new feature in future release
+      # #:email_format => :html#, 
+      # :email_prefix => "[#{ENV['APP_NAME']} #{Rails.env.titleize} Error] ",
+      # :sender_address => %{"#{ENV['APP_NAME']} Notifier" <#{Rails.env}@#{ENV['PRIMARY_DOMAIN']}>},
+      # :exception_recipients => [ ENV['SHADOW_EMAIL'] ],
+      # :ignore_if => lambda { |env, e| Rails.env.development? }
+    # # customize mailer layouts
+    # config.to_prepare do
+      # Devise::Mailer.layout "mailer" # email.haml or email.erb
+      # #Devise::Mailer.helper :mailer
+    # end
+    # unless Rails.env.development?
+      # # gzip assets
+      # use Rack::Deflater
+#       
+      # # CORS
+#       
+      # #require 'rack/cors'
+#       
+      # use Rack::Cors do
+        # allow do
+          # origins '*'
+          # resource '/assets/*', :headers => :any, :methods => :get
+        # end
+      # end
+    # end
+  routes:
+    default_url_options:
+      :host: "<%= ENV['APP_HOST'] %>"
+    
+development:
+  <<: *defaults
+  # config.after_initialize do
+    # Bullet.enable         = true
+    # Bullet.alert          = true
+    # Bullet.bullet_logger  = true
+    # Bullet.console        = true
+    # # Bullet.growl          = true
+    # # Bullet.xmpp           = {
+      # # :account => 'bullets_account@jabber.org',
+      # # :password => 'bullets_password_for_jabber',
+      # # :receiver => 'your_account@jabber.org',
+      # # :show_online_status => true
+    # # }
+    # Bullet.rails_logger = true
+    # Bullet.airbrake = false
+    # Bullet.disable_browser_cache = true
+  # end
+  config:
+    cache_classes: false
+    whiny_nils: true
+    consider_all_requests_local: true
+    action_controller:
+      perform_caching: false
+    action_mailer:
+      raise_delivery_errors: false
+    cache_store: :null_store
+    active_support:
+      deprecation: :log
+    action_dispatch:
+      best_standards_support: :builtin
+    active_record:
+      mass_assignment_sanitizer: :strict
+      auto_explain_threshold_in_seconds: 0.5
+    assets:
+      compress: false
+      debug: false
+
+staging:
+  <<: *defaults
+  config:
+    force_ssl: false
+    #lograge:
+    #  enabled: true
+    cache_classes: true
+    consider_all_requests_local: false
+    action_controller:
+      perform_caching: true
+    serve_static_assets: true
+    static_cache_control: 'public, max-age=2592000'
+    assets:
+      compress: true
+      compile: false
+      digest: true
+    log_level: :debug
+    # config.action_dispatch.rack_cache = {
+      # :metastore    => Dalli::Client.new,
+      # :entitystore  => 'file:tmp/cache/rack/body',
+      # :allow_reload => false
+    # }
+    #config.threadsafe!
+    i18n:
+      fallbacks: true
+    active_support:
+      deprecation: :notify
+
+production:
+  <<: *defaults
+  config:
+    force_ssl: false
+    lograge:
+      enabled: true
+    cache_classes: true
+    consider_all_requests_local: false
+    action_controller:
+      perform_caching: true
+    serve_static_assets: true
+    static_cache_control: 'public, max-age=2592000'
+    assets:
+      compress: true
+      compile: false
+      digest: true
+    log_level: :debug
+    # config.action_dispatch.rack_cache = {
+      # :metastore    => Dalli::Client.new,
+      # :entitystore  => 'file:tmp/cache/rack/body',
+      # :allow_reload => false
+    # }
+    #config.threadsafe!
+    i18n:
+      fallbacks: true
+    active_support:
+      deprecation: :notify

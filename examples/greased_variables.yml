@@ -1,0 +1,49 @@
+defaults: &defaults
+  deployment:
+    HEROKU_APP:       my-app-name
+    HEROKU_USERNAME:  example@example.com
+    HEROKU_PASSWORD:  *******
+    
+    GIT_REMOTE: heroku
+    GIT_BRANCH: master
+  
+  application:
+    COMPANY_NAME: Acme, Inc.
+    APP_NAME:     Acme Online
+    APP_TITLE:    The Official Acme Website
+    
+    TZ: America/New_York
+    
+    SUPERADMINS:    admin1@acme.com,admin2@acme.com
+    SENDER_NAME:    Acme
+    SENDER_EMAIL:   sender@acme.com
+    SHADOW_EMAIL:   tech@acme.com
+    ENABLE_EMAILS:  false
+    
+    SENDGRID_USERNAME:  acme
+    SENDGRID_PASSWORD:  *******
+    SENDGRID_DOMAIN:    acme.com
+    SENDGRID_SMTP:      smtp.sendgrid.net
+    SENDGRID_SMTP_PORT: 587
+    
+development:
+  <<: *defaults
+  application:
+    PRIMARY_DOMAIN: acme.local
+    APP_HOST:       acme.local:3000
+    ASSET_HOST:     acme.local:3000
+    
+    LINKEDIN_KEY:     *******
+    LINKEDIN_SECRET:  *******
+
+production:
+  <<: *defaults
+  application:
+    PRIMARY_DOMAIN: acme.com
+    APP_HOST:       acme.com
+    ASSET_HOST:     acme.com
+    
+    ENABLE_EMAILS: true
+    
+    LINKEDIN_KEY:     *******
+    LINKEDIN_SECRET:  *******
