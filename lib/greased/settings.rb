@@ -22,7 +22,11 @@ module Greased
     end
     
     def puts!
-      puts(*@settings.collect(&:serialize))
+      puts(*list)
+    end
+    
+    def list
+      @settings.collect(&:serialize)
     end
     
     def each(&block)
@@ -33,25 +37,7 @@ module Greased
     protected
     
     def refresh_settings!
-      @settings.clear
-      @config.collect do |app_method, app_values|
-        app_target = @application.send(app_method.to_sym)
-        
-        app_values.each do |method, values|
-          parents = [app_method]
-          
-          if (target = app_target.send(method.to_sym)).is_a? ActiveSupport::OrderedOptions
-            parents << method
-          else
-            values = { method => values }
-            target = app_target
-          end
-          
-          values.each do |key, value|
-            @settings << Setting.new(@application, target, key, value, @environment, parents)
-          end
-        end
-      end
+      @settings = @config.collect{ |key, value| Setting.from_config(@application, key, value, @environment) }.flatten
     end
   end
 end

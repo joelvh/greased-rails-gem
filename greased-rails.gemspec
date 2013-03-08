@@ -12,8 +12,8 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{Replicate common Rails application settings and environment variables using templates. Handy deployment tasks make managing your environments easier.}
   gem.homepage      = "http://rubygems.org/gems/greased-rails"
 
-  s.add_dependency "active_support", ">= 3.2.0"
-  s.add_dependency "railties", ">= 3.2.0"
+  gem.add_dependency "activesupport", ">= 3.2.0"
+  gem.add_dependency "railties", ">= 3.2.0"
   
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

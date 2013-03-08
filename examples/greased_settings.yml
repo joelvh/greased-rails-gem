@@ -3,13 +3,46 @@ defaults: &defaults
     force_ssl: false
     autoload_paths +=:
       - "<%= Rails.root %>/lib"
+    # See everything in the log (default is :info)
     log_level: :debug
+    # Settings in config/environments/* take precedence over those specified here.
+    # Application configuration should go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded.
+
+    # Custom directories with classes and modules you want to be autoloadable.
+    # config.autoload_paths += %W(#{config.root}/extras)
+
+    # Only load the plugins named here, in the order given (default is alphabetical).
+    # :all can be used as a placeholder for all plugins not explicitly named.
+    # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
+
+    # Activate observers that should always be running.
+    # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
+
+    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
+    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     time_zone: 'Eastern Time (US & Canada)'
+    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
+    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
+    # config.i18n.default_locale = :de
+
+    # Configure the default encoding used in templates for Ruby 1.9.
     encoding: 'utf-8'
+    # Configure sensitive parameters which will be filtered from the log file.
     filter_parameters +=:
       - :password
+    # Enable escaping HTML in JSON.
     active_support:
       escape_html_entities_in_json: true
+    # Use SQL instead of Active Record's schema dumper when creating the database.
+    # This is necessary if your schema can't be completely dumped by the schema dumper,
+    # like if you have constraints or database-specific column types
+    # config.active_record.schema_format = :sql
+
+    # Enforce whitelist mode for mass assignment.
+    # This will create an empty whitelist of attributes available for mass-assignment for all models
+    # in your app. As such, your models will need to explicitly whitelist or blacklist accessible
+    # parameters by using an attr_accessible or attr_protected declaration.
     active_record:
       whitelist_attributes: true
     action_mailer:
@@ -24,8 +57,10 @@ defaults: &defaults
         :password:        "<%= ENV['SENDGRID_PASSWORD'] %>"
         :domain:          "<%= ENV['SENDGRID_DOMAIN'] %>"
     action_controller:
+      # Enable serving of images, stylesheets, and JavaScripts from an asset server
       asset_host: "//<%= ENV['ASSET_HOST'] %>"
     assets:
+      # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
       precompile +=:
         - "rails_admin.js"
         - "rails_admin.css"
@@ -34,9 +69,11 @@ defaults: &defaults
         - "rails_admin/jquery.colorpicker.js"
         - "rails_admin/jquery.colorpicker.css"
       initialize_on_precompile: false
+      # Enable the asset pipeline
       enabled: true
       js_compressor: :closure
       #css_compressor: :less
+      # Version of your assets, change this if you want to expire all your assets
       version: '1.0'
     # if defined? ::Rack::PerftoolsProfiler
       # config.middleware.use ::Rack::PerftoolsProfiler, :default_printer => 'gif', :bundler => true
@@ -96,42 +133,81 @@ development:
     # Bullet.disable_browser_cache = true
   # end
   config:
+    # In the development environment your application's code is reloaded on
+    # every request. This slows down response time but is perfect for development
+    # since you don't have to restart the web server when you make code changes.
     cache_classes: false
+    # Log error messages when you accidentally call methods on nil.
     whiny_nils: true
+    # Show full error reports and disable caching
     consider_all_requests_local: true
     action_controller:
       perform_caching: false
     action_mailer:
+      # Disable delivery errors, bad email addresses will be ignored
       raise_delivery_errors: false
+    # Use a different cache store in production
     cache_store: :null_store
     active_support:
+      # Print deprecation notices to the Rails logger
       deprecation: :log
     action_dispatch:
+      # Specifies the header that your server uses for sending files
+      # x_sendfile_header: "X-Sendfile" # for apache
+      # x_sendfile_header: 'X-Accel-Redirect' # for nginx
+      
+      # Only use best-standards-support built into browsers
       best_standards_support: :builtin
     active_record:
+      # Raise exception on mass assignment protection for Active Record models
       mass_assignment_sanitizer: :strict
+      # Log the query plan for queries taking more than this (works
+      # with SQLite, MySQL, and PostgreSQL)
       auto_explain_threshold_in_seconds: 0.5
     assets:
+      # Do not compress assets
       compress: false
+      # Expands the lines which load the assets
       debug: false
 
 staging:
   <<: *defaults
   config:
+    # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
     force_ssl: false
-    #lograge:
-    #  enabled: true
+    lograge:
+      # more concise logging (one line per request)
+      enabled: false
+    # Code is not reloaded between requests
     cache_classes: true
+    # Full error reports are disabled and caching is turned on
     consider_all_requests_local: false
     action_controller:
       perform_caching: true
+    # Disable Rails's static asset server (Apache or nginx will already do this)
     serve_static_assets: true
     static_cache_control: 'public, max-age=2592000'
     assets:
+      # Compress JavaScripts and CSS
       compress: true
+      # Don't fallback to assets pipeline if a precompiled asset is missed
       compile: false
+      # Generate digests for assets URLs
       digest: true
+      # Defaults to nil and saved in location specified by config.assets.prefix
+      # manifest: YOUR_PATH
+      
+    # See everything in the log (default is :info)
     log_level: :debug
+    # Prepend all log lines with the following tags
+    # log_tags: [ :subdomain, :uuid ]
+  
+    # Use a different logger for distributed setups
+    # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
+
+    # Use a different cache store in production
+    cache_store: :dalli_store
+    
     # config.action_dispatch.rack_cache = {
       # :metastore    => Dalli::Client.new,
       # :entitystore  => 'file:tmp/cache/rack/body',
@@ -139,27 +215,48 @@ staging:
     # }
     #config.threadsafe!
     i18n:
+      # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+      # the I18n.default_locale when a translation can not be found)
       fallbacks: true
     active_support:
+      # Send deprecation notices to registered listeners
       deprecation: :notify
 
 production:
   <<: *defaults
   config:
+    # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
     force_ssl: false
     lograge:
+      # more concise logging (one line per request)
       enabled: true
+    # Code is not reloaded between requests
     cache_classes: true
+    # Full error reports are disabled and caching is turned on
     consider_all_requests_local: false
     action_controller:
       perform_caching: true
+    # Disable Rails's static asset server (Apache or nginx will already do this)
     serve_static_assets: true
     static_cache_control: 'public, max-age=2592000'
     assets:
+      # Compress JavaScripts and CSS
       compress: true
+      # Don't fallback to assets pipeline if a precompiled asset is missed
       compile: false
+      # Generate digests for assets URLs
       digest: true
+      # Defaults to nil and saved in location specified by config.assets.prefix
+      # manifest: YOUR_PATH
+      
+    # See everything in the log (default is :info)
     log_level: :debug
+    # Prepend all log lines with the following tags
+    # log_tags: [ :subdomain, :uuid ]
+  
+    # Use a different logger for distributed setups
+    # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
+
     # config.action_dispatch.rack_cache = {
       # :metastore    => Dalli::Client.new,
       # :entitystore  => 'file:tmp/cache/rack/body',
@@ -167,6 +264,12 @@ production:
     # }
     #config.threadsafe!
     i18n:
+      # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+      # the I18n.default_locale when a translation can not be found)
       fallbacks: true
+    # Use a different cache store in production
+    cache_store: :dalli_store
     active_support:
+      # Send deprecation notices to registered listeners
       deprecation: :notify
+

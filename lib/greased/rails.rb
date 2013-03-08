@@ -1,8 +1,2 @@
-require 'greased/rails/engine'
-require 'greased/rails/version'
-
-module Greased
-  module Rails
-    
-  end
-end
+require_relative 'rails/engine'
+require_relative 'rails/version'
