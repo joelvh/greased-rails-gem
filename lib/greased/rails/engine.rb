@@ -26,30 +26,29 @@ module Greased
         
         options     = Applicator.rails_options.merge(:app => application)
         applicator  = Applicator.new(options)
+        variables   = applicator.variables(options).except("RACK_ENV", "RAILS_ENV")
         
-        applicator.variables(options).each do |key, value|
-          
-          # Don't mess with the environment
-          next if ["RACK_ENV", "RAILS_ENV"].include?(key.to_s.upcase)
-          
+        variables.each do |key, value|
           ENV[key.to_s] = value.to_s
         end
         
-        puts ""
-        puts "############################## GREASED ##############################"
-        puts "#                                                                   #"
-        puts "#               ... loading application settings ...                #"
-        puts "#                                                                   #"
-        puts "#####################################################################"
-        puts ""
-        
-        applicator.list_env.map.collect do |var|
-          puts "   #{var}"
+        if ::Rails.env.development?
+          puts ""
+          puts "############################## GREASED ##############################"
+          puts "#                                                                   #"
+          puts "#               ... loading application settings ...                #"
+          puts "#                                                                   #"
+          puts "#####################################################################"
+          puts ""
+          
+          applicator.list_env.map.collect do |var|
+            puts "   #{var}"
+          end
+          
+          puts ""
+          puts "#####################################################################"
+          puts ""
         end
-        
-        puts ""
-        puts "#####################################################################"
-        puts ""
         
       end
       
@@ -84,21 +83,23 @@ module Greased
         
         applicator.settings.apply!
         
-        puts ""
-        puts "############################## GREASED ##############################"
-        puts "#                                                                   #"
-        puts "#               ... loading application settings ...                #"
-        puts "#                                                                   #"
-        puts "#####################################################################"
-        puts ""
-        
-        applicator.settings.list.map(&:strip).map{|setting| setting.split("\n")}.flatten.each do |line|
-          puts "   #{line}"
+        if ::Rails.env.development?
+          puts ""
+          puts "############################## GREASED ##############################"
+          puts "#                                                                   #"
+          puts "#               ... loading application settings ...                #"
+          puts "#                                                                   #"
+          puts "#####################################################################"
+          puts ""
+          
+          applicator.settings.list.map(&:strip).map{|setting| setting.split("\n")}.flatten.each do |line|
+            puts "   #{line}"
+          end
+          
+          puts ""
+          puts "#####################################################################"
+          puts ""
         end
-        
-        puts ""
-        puts "#####################################################################"
-        puts ""
         
       end
     end
