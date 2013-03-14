@@ -1,4 +1,4 @@
-# GreasedRails
+# Greased Rails
 
 Reusable default application settings, environment variables, and deployment tasks.
 
