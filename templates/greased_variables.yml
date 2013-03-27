@@ -20,11 +20,11 @@ defaults: &defaults
     SHADOW_EMAIL:   tech@acme.com
     ENABLE_EMAILS:  false
     
-    SENDGRID_USERNAME:  acme
-    SENDGRID_PASSWORD:  *******
-    SENDGRID_DOMAIN:    acme.com
-    SENDGRID_SMTP:      smtp.sendgrid.net
-    SENDGRID_SMTP_PORT: 587
+    SMTP_USERNAME:  acme
+    SMTP_PASSWORD:  *******
+    SMTP_DOMAIN:    acme.com
+    SMTP_HOST:      smtp.sendgrid.net
+    SMTP_PORT:      587
     
 development:
   <<: *defaults

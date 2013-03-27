@@ -25,19 +25,29 @@ There are two configuration files you can create (optional):
  * greased_settings.yml (serialized application settings)
  * greased_variables.yml (serialized ENV variables)
 
-You can see what they look like in the "examples" folder.
+You can see what they look like in the "templates" folder.
 
 ### Application Settings - greased_settings.yml
 
-This is a YAML serialization of most settings that you would find in "/app/config/application.rb" and "config/environments/*.rb". What's nice is that you can easily view settings for each environment in one file and allow them to inherit from eachother.
+This is a YAML serialization of most settings that you would find in "config/application.rb" and "config/environments/*.rb". What's nice is that you can easily view settings for each environment in one file and allow them to inherit from eachother.
 
-You can save your "greased_settings.yaml" file in the root of your Rails application or in the "config" folder. If you don't create your own file, Greased will use the file in the "examples" folder of this gem.
+If you don't create your own file, Greased will use the file in the "templates" folder of this gem. To specify your own settings, save your file to one of the following locations:
+
+    * greased_settings.yml (in the root of your Rails application)
+    * greased/settings.yml
+    * config/greased_settings.yml
+    * config/greased/settings.yml
 
 ### Environment Variables - greased_variables.yml
 
 This is a YAML serialization of your environment variables. You can easily share environment variables across environments.
 
-You can save your "greased_settings.yaml" file in the root of your Rails application or in the "config" folder. If you don't create your own file, Greased won't load any environment variables.
+If you don't create your own file, Greased won't load any environment variables. To specify your own settings, save your file to one of the following locations:
+
+    * greased_variables.yml (in the root of your Rails application)
+    * greased/variables.yml
+    * config/greased_variables.yml
+    * config/greased/variables.yml
 
 You can use the "greased:env:dump" Rake task to create *.env files for "development", "staging", and "production". These files can be used by Foreman to load environment variables when you start your Rails server.
 

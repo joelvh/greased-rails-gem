@@ -5,10 +5,12 @@ require 'active_support/core_ext/hash/deep_merge'
 module Greased
   class Applicator
     
-    APP_SETTINGS_FILENAME = "greased_settings.yml"
-    ENV_VARS_FILENAME     = "greased_variables.yml"
-    DEFAULT_SETTINGS_FILE = Pathname.new(File.join(File.dirname(__FILE__), '../../examples', APP_SETTINGS_FILENAME)).realpath
-    DEFAULT_ENV           = "development"
+    APP_SETTINGS_FILENAME_BASE  = "settings.yml"
+    APP_SETTINGS_FILENAME       = "greased_#{APP_SETTINGS_FILENAME_BASE}"
+    ENV_VARS_FILENAME_BASE      = "variables.yml"
+    ENV_VARS_FILENAME           = "greased_#{ENV_VARS_FILENAME_BASE}"
+    DEFAULT_SETTINGS_FILE       = Pathname.new(File.join(File.dirname(__FILE__), '..', '..', 'templates', APP_SETTINGS_FILENAME)).realpath
+    DEFAULT_ENV                 = "development"
     
     def self.default_options
       {
@@ -27,8 +29,19 @@ module Greased
           :app => ::Rails.application,
           #:env => ::Rails.env || DEFAULT_ENV,
           #:groups => ["application"],
-          :app_filename => [File.join(::Rails.root, APP_SETTINGS_FILENAME), File.join(::Rails.root, "config", APP_SETTINGS_FILENAME), DEFAULT_SETTINGS_FILE],
-          :env_filename => [File.join(::Rails.root, ENV_VARS_FILENAME),     File.join(::Rails.root, "config", ENV_VARS_FILENAME)]
+          :app_filename => [
+            File.join(::Rails.root, APP_SETTINGS_FILENAME), 
+            File.join(::Rails.root, "greased", APP_SETTINGS_FILENAME_BASE),
+            File.join(::Rails.root, "config", APP_SETTINGS_FILENAME), 
+            File.join(::Rails.root, "config", "greased", APP_SETTINGS_FILENAME_BASE),
+            DEFAULT_SETTINGS_FILE
+          ],
+          :env_filename => [
+            File.join(::Rails.root, ENV_VARS_FILENAME),
+            File.join(::Rails.root, "greased", ENV_VARS_FILENAME_BASE),
+            File.join(::Rails.root, "config", ENV_VARS_FILENAME),
+            File.join(::Rails.root, "config", "greased", ENV_VARS_FILENAME_BASE)
+          ]
         )
       else
         default_options

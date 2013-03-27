@@ -50,12 +50,12 @@ defaults: &defaults
         :host:            "<%= ENV['APP_HOST'] %>"
       asset_host:         "http://<%= ENV['ASSET_HOST'] %>"
       smtp_settings:
-        :address:         "<%= ENV['SENDGRID_SMTP'] %>"
-        :port:            "<%= ENV['SENDGRID_SMTP_PORT'] %>"
+        :address:         "<%= ENV['SMTP_HOST'] %>"
+        :port:            "<%= ENV['SMTP_PORT'] %>"
         :authentication:  :plain
-        :user_name:       "<%= ENV['SENDGRID_USERNAME'] %>"
-        :password:        "<%= ENV['SENDGRID_PASSWORD'] %>"
-        :domain:          "<%= ENV['SENDGRID_DOMAIN'] %>"
+        :user_name:       "<%= ENV['SMTP_USERNAME'] %>"
+        :password:        "<%= ENV['SMTP_PASSWORD'] %>"
+        :domain:          "<%= ENV['SMTP_DOMAIN'] %>"
     action_controller:
       # Enable serving of images, stylesheets, and JavaScripts from an asset server
       asset_host: "//<%= ENV['ASSET_HOST'] %>"
@@ -71,7 +71,7 @@ defaults: &defaults
       initialize_on_precompile: false
       # Enable the asset pipeline
       enabled: true
-      js_compressor: :closure
+      #js_compressor: :closure
       #css_compressor: :less
       # Version of your assets, change this if you want to expire all your assets
       version: '1.0'
