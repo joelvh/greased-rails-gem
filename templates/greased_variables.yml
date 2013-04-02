@@ -1,3 +1,9 @@
+# 
+# This is an example of how you could organize your environment variables. 
+# Currently only the "application" group is loaded. The "deployment" group 
+# may be used in Rake tasks eventually.
+# 
+
 defaults: &defaults
   deployment:
     HEROKU_APP:       my-app-name

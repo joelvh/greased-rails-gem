@@ -1,0 +1,30 @@
+# 
+# Create a file like this in your application if you want to use the default 
+# greased_settings.yml template in your application and only specify a couple changes 
+# without creating a whole new greased_settings.yml file.
+#
+# The settings in this file will be applied after the greased_settings.yml file 
+# is applied to the application environment.
+# 
+# *** NOTE ***
+# 
+# For the "defaults" section to have any effect, you have to specify the environment 
+# that should inherit from the defaults when loading these settings. Otherwise 
+# the settings will be ignored rather than be applied to all environments.
+# 
+
+defaults: &defaults
+  config:
+    # suppose you want to use all defaults in greased_settings.yml 
+    # and only change the SSL settings for all environments
+    force_ssl: true
+    
+development:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults
+

@@ -1,3 +1,9 @@
+# 
+# Create a file like this in your application to specify your own default settings. 
+# By default, this template file will be loaded into your environment unless you 
+# create your own file. (You could create a blank file so no changes are loaded.)
+# 
+
 defaults: &defaults
   config:
     force_ssl: false

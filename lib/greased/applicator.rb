@@ -5,10 +5,18 @@ require 'active_support/core_ext/hash/deep_merge'
 module Greased
   class Applicator
     
+    # settings applied to application environment
     APP_SETTINGS_FILENAME_BASE  = "settings.yml"
     APP_SETTINGS_FILENAME       = "greased_#{APP_SETTINGS_FILENAME_BASE}"
+    # additional settings applied to application environment 
+    # after default Greased (template) settings are applied 
+    # or custom settings file is applied.
+    APP_PATCH_FILENAME_BASE     = "partial.yml"
+    APP_PATCH_FILENAME          = "greased_#{APP_PATCH_FILENAME_BASE}"
+    # environment variables to load into ENV
     ENV_VARS_FILENAME_BASE      = "variables.yml"
     ENV_VARS_FILENAME           = "greased_#{ENV_VARS_FILENAME_BASE}"
+    # default Greased template with application settings
     DEFAULT_SETTINGS_FILE       = Pathname.new(File.join(File.dirname(__FILE__), '..', '..', 'templates', APP_SETTINGS_FILENAME)).realpath
     DEFAULT_ENV                 = "development"
     
@@ -35,6 +43,12 @@ module Greased
             File.join(::Rails.root, "config", APP_SETTINGS_FILENAME), 
             File.join(::Rails.root, "config", "greased", APP_SETTINGS_FILENAME_BASE),
             DEFAULT_SETTINGS_FILE
+          ],
+          :partial_filename => [
+            File.join(::Rails.root, APP_PATCH_FILENAME), 
+            File.join(::Rails.root, "greased", APP_PATCH_FILENAME_BASE),
+            File.join(::Rails.root, "config", APP_PATCH_FILENAME), 
+            File.join(::Rails.root, "config", "greased", APP_PATCH_FILENAME_BASE)
           ],
           :env_filename => [
             File.join(::Rails.root, ENV_VARS_FILENAME),
@@ -89,7 +103,7 @@ module Greased
     def variables(options = {})
       options             = @options.merge(options)
       groups              = Array.wrap(options[:groups])
-      grouped_variables   = load_settings(@options[:env_filename])
+      grouped_variables   = load_settings(options[:env_filename])
       
       groups.inject({}) do |all, group|
         all.merge grouped_variables.fetch(options[:env], {}).fetch(group, {})
@@ -97,8 +111,12 @@ module Greased
     end
     
     def settings(options = {})
-      options = @options.merge(options)
-      config  = load_settings(options[:app_filename], options).fetch(env, {})
+      options = @options.merge(:env => env).merge(options)
+      # get settings for application environment
+      config = load_settings(options[:app_filename], options).fetch(options[:env], {})
+      # add partial settings for environment
+      config.deep_merge! load_settings(options[:partial_filename], options).fetch(options[:env], {})
+      
       Settings.new(app, env, config)
     end
     
@@ -121,7 +139,6 @@ module Greased
       
       all || {}
     end
-    
     
   end
 end

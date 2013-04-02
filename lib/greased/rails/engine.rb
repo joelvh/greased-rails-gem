@@ -26,7 +26,7 @@ module Greased
         
         options     = Applicator.rails_options.merge(:app => application)
         applicator  = Applicator.new(options)
-        variables   = applicator.variables(options).except("RACK_ENV", "RAILS_ENV")
+        variables   = applicator.variables.except("RACK_ENV", "RAILS_ENV")
         
         variables.each do |key, value|
           ENV[key.to_s] = value.to_s

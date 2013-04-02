@@ -38,6 +38,17 @@ If you don't create your own file, Greased will use the file in the "templates" 
     * config/greased_settings.yml
     * config/greased/settings.yml
 
+#### Partial Settings - greased_partial.yml
+
+This is a YAML serialization of settings you want to override in greased_settings.yml. This is useful if you let Greased load the default template and only want to override a few settings without copying the whole template file over.
+
+Save your file to one of the following locations:
+
+    * greased_partial.yml (in the root of your Rails application)
+    * greased/partial.yml
+    * config/greased_partial.yml
+    * config/greased/partial.yml
+
 ### Environment Variables - greased_variables.yml
 
 This is a YAML serialization of your environment variables. You can easily share environment variables across environments.
