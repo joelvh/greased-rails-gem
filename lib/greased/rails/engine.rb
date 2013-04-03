@@ -5,6 +5,8 @@ module Greased
   module Rails
     class Engine < ::Rails::Engine
       
+      Greased.logger.level = Logger::DEBUG if ::Rails.env.development?
+      
       rake_tasks do
         path = Pathname.new(File.join(File.dirname(__FILE__), '../../../tasks/')).realpath
         
@@ -24,8 +26,8 @@ module Greased
       #:load_environment_hook
       config.before_configuration do |application|
         
-        options     = Applicator.rails_options.merge(:app => application)
-        applicator  = Applicator.new(options)
+        options     = Options.find(::Rails.root)
+        applicator  = Applicator.new(application, options)
         variables   = applicator.variables.except("RACK_ENV", "RAILS_ENV")
         
         variables.each do |key, value|
@@ -33,34 +35,51 @@ module Greased
         end
         
         if ::Rails.env.development?
-          puts ""
-          puts "############################## GREASED ##############################"
-          puts "#                                                                   #"
-          puts "#               ... loading application settings ...                #"
-          puts "#                                                                   #"
-          puts "#####################################################################"
-          puts ""
+          
+          Greased.logger.debug " "
+          Greased.logger.debug "## GREASED [#{applicator.env.upcase}] #{'#' * (55 - applicator.env.size)}"
+          Greased.logger.debug "#                                                                   #"
+          Greased.logger.debug "#                      ... loaded options ...                       #"
+          Greased.logger.debug "#                                                                   #"
+          Greased.logger.debug "#####################################################################"
+          Greased.logger.debug " "
+          
+          pp options
+          
+          Greased.logger.debug " "
+          Greased.logger.debug "#####################################################################"
+          Greased.logger.debug " "
+          
+          ##########################
+          
+          Greased.logger.debug " "
+          Greased.logger.debug "## GREASED [#{applicator.env.upcase}] #{'#' * (55 - applicator.env.size)}"
+          Greased.logger.debug "#                                                                   #"
+          Greased.logger.debug "#              ... loading environment variables ...                #"
+          Greased.logger.debug "#                                                                   #"
+          Greased.logger.debug "#####################################################################"
+          Greased.logger.debug " "
           
           applicator.list_env.map.collect do |var|
-            puts "   #{var}"
+            Greased.logger.debug "   #{var}"
           end
           
-          puts ""
-          puts "#####################################################################"
-          puts ""
+          Greased.logger.debug " "
+          Greased.logger.debug "#####################################################################"
+          Greased.logger.debug " "
         end
         
       end
       
-      # config.before_configuration {|app| puts "BEFORE CONFIGURATION"}
+      # config.before_configuration {|app| Greased.logger.debug "BEFORE CONFIGURATION"}
 #       
-      # config.before_initialize {|app| puts "BEFORE INITIALIZE"}
+      # config.before_initialize {|app| Greased.logger.debug "BEFORE INITIALIZE"}
 #       
-      # config.to_prepare {|app| puts "TO PREPARE"}
+      # config.to_prepare {|app| Greased.logger.debug "TO PREPARE"}
 #       
-      # config.before_eager_load {|app| puts "BEFORE EAGER LOAD"}
+      # config.before_eager_load {|app| Greased.logger.debug "BEFORE EAGER LOAD"}
 #       
-      # config.after_initialize {|app| puts "AFTER INITIALIZE"}
+      # config.after_initialize {|app| Greased.logger.debug "AFTER INITIALIZE"}
 #       
       # hooks = [
         # :load_environment_hook, :load_active_support, :preload_frameworks, :initialize_logger, :initialize_cache, :set_clear_dependencies_hook,
@@ -71,34 +90,34 @@ module Greased
       # ]
 #       
       # hooks.each do |hook_name|
-        # initializer("greased.before.#{hook_name}", :before => hook_name, :group => :all) {|a| puts "BEFORE #{hook_name}".upcase}
+        # initializer("greased.before.#{hook_name}", :before => hook_name, :group => :all) {|a| Greased.logger.debug "BEFORE #{hook_name}".upcase}
       # end
       
       # RUNS BEFORE ENVIRONMENT CONFIGS ARE LOADED!
       #app.config.before_initialize
       config.before_configuration do |application|
         
-        options     = Applicator.rails_options.merge(:app => application)
-        applicator  = Applicator.new(options)
+        options     = Options.find(::Rails.root)
+        applicator  = Applicator.new(application, options)
         
         applicator.settings.apply!
         
         if ::Rails.env.development?
-          puts ""
-          puts "############################## GREASED ##############################"
-          puts "#                                                                   #"
-          puts "#               ... loading application settings ...                #"
-          puts "#                                                                   #"
-          puts "#####################################################################"
-          puts ""
+          Greased.logger.debug " "
+          Greased.logger.debug "## GREASED [#{applicator.env.upcase}] #{'#' * (55 - applicator.env.size)}"
+          Greased.logger.debug "#                                                                   #"
+          Greased.logger.debug "#               ... loading application settings ...                #"
+          Greased.logger.debug "#                                                                   #"
+          Greased.logger.debug "#####################################################################"
+          Greased.logger.debug " "
           
           applicator.settings.list.map(&:strip).map{|setting| setting.split("\n")}.flatten.each do |line|
-            puts "   #{line}"
+            Greased.logger.debug "   #{line}"
           end
           
-          puts ""
-          puts "#####################################################################"
-          puts ""
+          Greased.logger.debug " "
+          Greased.logger.debug "#####################################################################"
+          Greased.logger.debug " "
         end
         
       end

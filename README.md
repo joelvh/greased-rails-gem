@@ -20,12 +20,25 @@ Or install it yourself as:
 
 ## Usage
 
-There are two configuration files you can create (optional):
+There are four OPTIONAL configuration files you can create:
 
+ * greased.yml (options for applying settings to environment)
  * greased_settings.yml (serialized application settings)
+ * greased_partial.yml (serialized application settings that override greased_settings.yml)
  * greased_variables.yml (serialized ENV variables)
 
-You can see what they look like in the "templates" folder.
+All YAML files support ERB. You can see what they look like in the "templates" folder.
+
+### Options - greased.yml
+
+This is a YAML serialization of options defining environment and where files are located.
+
+If you don't create your own file, Greased will use the file in the "templates" folder of this gem. To specify your own settings, save your file to one of the following locations:
+
+    * greased.yml (in the root of your Rails application)
+    * greased/greased.yml
+    * config/greased.yml
+    * config/greased/greased.yml
 
 ### Application Settings - greased_settings.yml
 

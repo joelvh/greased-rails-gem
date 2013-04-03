@@ -1,18 +1,15 @@
 
 module Greased
   class Setting
-    
     DEFAULT_OPERATOR = "="
     OPERATIONS = {
-      "<<"    => lambda{ |target, name, value| target.send(:"#{name}<<", value) },
-      "+="    => lambda{ |target, name, value| target.send(:"#{name}=", target.send(:"#{name}") + value) },
-      "-="    => lambda{ |target, name, value| target.send(:"#{name}=", target.send(:"#{name}") - value) },
-      "*="    => lambda{ |target, name, value| target.send(:"#{name}=", target.send(:"#{name}") * value) },
-      "="     => lambda{ |target, name, value| target.send(:"#{name}=", value) },
-      "send"  => lambda{ |target, name, value| target.send(name.to_sym, *value) }
-    }
-    OPERATION_VALIDATORS = {
-      "send" => lambda{|target, name, value| raise "Value for the 'send' operator must be an array of method parameters" unless value.is_a? Array }
+      "<<"    => MethodCaller.new("<<"),
+      "+="    => MethodCaller.new("+", :reassign => true),
+      "-="    => MethodCaller.new("-", :reassign => true),
+      "*="    => MethodCaller.new("*", :reassign => true),
+      "="     => MethodCaller.new("="),
+      "call"  => MethodCaller.new,
+      "send"  => MethodCaller.new
     }
     
     attr_reader :name, :value, :operator, :app, :env
@@ -33,8 +30,7 @@ module Greased
     end
     
     def apply!
-      raise "Unknown operator (#{operator}) for setting option: #{name}"  unless OPERATIONS.keys.include? operator
-      OPERATION_VALIDATORS[operator].call(@target, name, value)           if OPERATION_VALIDATORS.keys.include? operator
+      raise "Unknown operator (#{operator}) for setting option: #{name}" unless OPERATIONS.keys.include? operator
       OPERATIONS[operator].call(@target, name, value)
       
       self

@@ -1,0 +1,19 @@
+
+# Where to look for the environment settings file(s).
+# By default, Greased will try several file path permuations to find the file dynamically.
+# app_filename:     <%= File.join(Rails.root, 'greased_settings.yml') %>
+
+# Where to look for the environment settings override file(s).
+# By default, Greased will try several file path permuations to find the file dynamically.
+# partial_filename: <%= File.join(Rails.root, 'greased_partial.yml') %>
+
+# Where to look for the environment variable file(s).
+# By default, Greased will try several file path permuations to find the file dynamically.
+# env_filename:     <%= File.join(Rails.root, 'greased_variables.yml') %>
+
+# Envirionment (e.g. development, staging, production)
+env:              <%= ENV['RAILS_ENV'] || ENV['RACK_ENV'] || "development" %>
+
+# Groups within the environment variables to load up.
+groups:           ["application"]
+

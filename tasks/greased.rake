@@ -3,30 +3,30 @@ require 'greased-rails'
 namespace :greased do
   namespace :env do
     task :dump => :environment do
-      options   = Greased::Applicator.rails_options
-      settings  = Greased::Applicator.new(options)
+      options   = Greased::Options.find(Rails.root)
+      applicator  = Greased::Applicator.new(Rails.application, options)
       
-      puts ""
-      puts "############################## GREASED ##############################"
-      puts "#                                                                   #"
-      puts "#            ... dumping variables to *.env files ...               #"
-      puts "#                                                                   #"
-      puts "#####################################################################"
-      puts ""
+      Greased.logger.debug ""
+      Greased.logger.debug "## GREASED [#{applicator.env.upcase}] #{'#' * (55 - applicator.env.size)}"
+      Greased.logger.debug "#                                                                   #"
+      Greased.logger.debug "#            ... dumping variables to *.env files ...               #"
+      Greased.logger.debug "#                                                                   #"
+      Greased.logger.debug "#####################################################################"
+      Greased.logger.debug ""
       
       environments  = ["development", "staging", "production"]
       longest       = environments.map(&:size).max
       
       environments.each do |env|
-        path      = settings.save_env_file(env)
-        filename  = Pathname.new(path).basename
+        path      = applicator.save_env_file(Rails.root, env)
+        filename  = File.basename(path)
         
-        puts "   [#{env}]#{' ' * (longest - env.size)} filename: #{path}"
+        Greased.logger.debug "   [#{env}]#{' ' * (longest - env.size)} filename: #{path}"
       end
       
-      puts ""
-      puts "#####################################################################"
-      puts ""
+      Greased.logger.debug ""
+      Greased.logger.debug "#####################################################################"
+      Greased.logger.debug ""
       
     end
   end

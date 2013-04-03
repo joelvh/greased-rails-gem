@@ -12,21 +12,16 @@ module Greased
       refresh_settings!
     end
     
-    def serialize
-      @settings.collect(&:serialize).join("\n")
-    end
-    
     def apply!
-      @settings.each(&:apply!)
-      self
-    end
-    
-    def puts!
-      puts(*list)
+      each(&:apply!)
     end
     
     def list
-      @settings.collect(&:serialize)
+      @settings.map(&:serialize)
+    end
+    
+    def serialize
+      list.join("\n")
     end
     
     def each(&block)
@@ -37,7 +32,7 @@ module Greased
     protected
     
     def refresh_settings!
-      @settings = @config.collect{ |key, value| Setting.from_config(@application, key, value, @environment) }.flatten
+      @settings = @config.map{|key, value| Setting.from_config(@application, key, value, @environment)}.flatten
     end
   end
 end
