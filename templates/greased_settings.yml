@@ -10,8 +10,8 @@ defaults: &defaults
     autoload_paths +=:
       - "<%= Rails.root %>/lib"
     # eager load lib directory in threadsafe mode
-    eager_load_paths +=:
-      - "<%= Rails.root %>/lib"
+    # eager_load_paths +=:
+    #   - "<%= Rails.root %>/lib"
     # See everything in the log (default is :info)
     log_level: :debug
     # Settings in config/environments/* take precedence over those specified here.
@@ -154,7 +154,7 @@ development:
       perform_caching: false
     action_mailer:
       # Disable delivery errors, bad email addresses will be ignored
-      raise_delivery_errors: false
+      raise_delivery_errors: true
     # Use a different cache store in production
     cache_store: :null_store
     active_support:

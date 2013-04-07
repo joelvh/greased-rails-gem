@@ -7,8 +7,13 @@ module Greased
       
       Greased.logger.level = Logger::DEBUG if ::Rails.env.development?
       
+      # Config defaults
+      #config.greased_options = 
+      #config.greased_applicator = 
+      
+      # Load rake tasks
       rake_tasks do
-        path = Pathname.new(File.join(File.dirname(__FILE__), '../../../tasks/')).realpath
+        path = Greased.file_path(File.dirname(__FILE__), '../../../tasks/')
         
         Dir["#{path}/*.rake"].each do |filename|
           load filename
