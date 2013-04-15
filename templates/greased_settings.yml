@@ -236,6 +236,9 @@ production:
   config:
     # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
     force_ssl: false
+    # eager load lib directory in threadsafe mode
+    eager_load_paths +=:
+      - "<%= Rails.root %>/lib"
     lograge:
       # more concise logging (one line per request)
       enabled: true
