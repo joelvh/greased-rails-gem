@@ -18,6 +18,9 @@ defaults: &defaults
     # suppose you want to use all defaults in greased_settings.yml 
     # and only change the SSL settings for all environments
     force_ssl: true
+    # eager load lib directory in threadsafe mode
+    # eager_load_paths +=:
+    #   - "<%= Rails.root %>/lib"
     
 development:
   <<: *defaults
