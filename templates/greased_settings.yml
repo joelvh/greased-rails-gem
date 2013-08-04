@@ -70,13 +70,9 @@ defaults: &defaults
       asset_host: "//<%= ENV['ASSET_HOST'] %>"
     assets:
       # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-      precompile +=:
-        - "rails_admin.js"
-        - "rails_admin.css"
-        - "rails_admin/rails_admin.js"
-        - "rails_admin/rails_admin.css"
-        - "rails_admin/jquery.colorpicker.js"
-        - "rails_admin/jquery.colorpicker.css"
+      # precompile +=:
+        # - "application.js"
+        # - "application.css"
       initialize_on_precompile: false
       # Enable the asset pipeline
       enabled: true
