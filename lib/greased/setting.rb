@@ -41,7 +41,7 @@ module Greased
       def from_config(app, property_name, property_values, env)
         app_target  = app.send(property_name.to_sym)
         
-        property_values.collect do |setting_name, setting_values|
+        property_values.map do |setting_name, setting_values|
           parents = Array.wrap(property_name)
           
           begin
@@ -52,13 +52,11 @@ module Greased
               target          = app_target
             end
             
-            setting_values.collect{ |key, value| new(app, target, key, value, env, parents) }
+            setting_values.map{ |key, value| new(app, target, key, value, env, parents) }
           rescue NoMethodError => ex
-            puts "Warning! Configuration section #{app_target} doesn't exist: #{ex}"
-            
-            []
+            puts "WARNING: Configuration section #{setting_name} doesn't exist: #{ex}"
           end
-        end.flatten
+        end.flatten.compact
       end
       
     end
