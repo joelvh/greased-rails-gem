@@ -44,18 +44,20 @@ module Greased
         property_values.collect do |setting_name, setting_values|
           parents = Array.wrap(property_name)
           
-          if app_target.respond_to? setting_name.to_sym
+          begin
             if (target = app_target.send(setting_name.to_sym)).is_a? ActiveSupport::OrderedOptions
               parents << setting_name
             else
               setting_values  = { setting_name => setting_values }
               target          = app_target
             end
-          else
-            puts "Warning: #{setting_name} doesn't exist"
+            
+            setting_values.collect{ |key, value| new(app, target, key, value, env, parents) }
+          rescue NoMethodError => ex
+            puts "Warning! Configuration section #{app_target} doesn't exist: #{ex}"
+            
+            []
           end
-          
-          setting_values.collect{ |key, value| new(app, target, key, value, env, parents) }
         end.flatten
       end
       
