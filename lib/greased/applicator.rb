@@ -49,6 +49,26 @@ module Greased
       end
     end
     
+    # Apply variables to `ENV` constant.
+    #
+    # @param options [Hash] Options for setting `ENV` variables.
+    # @option options [Boolean] :overwrite Whether to overwrite
+    #   existing values in `ENV`
+    # @return [Hash] Returns a list of variables that were applied
+    #   (unless the variable existed and the :overwrite option
+    #   was not specified)
+    def apply_variables_to_environment!(options = {})
+      variables_to_apply = variables.except("RACK_ENV", "RAILS_ENV")
+      
+      variables_to_apply.each do |key, value|
+        if !ENV.has_key?(key.to_s) || options[:overwrite] == true
+          ENV[key.to_s] = value.to_s
+        end
+      end
+      
+      variables_to_apply
+    end
+    
     def settings(options = {})
       options = @options.merge(:env => env).merge(options)
       # get settings for application environment
