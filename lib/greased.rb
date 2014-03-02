@@ -1,5 +1,5 @@
 
-require_relative "greased/loggable"
+require "greased/loggable"
 
 module Greased
   extend Loggable
@@ -31,10 +31,10 @@ module Greased
   end
 end
 
-require_relative "greased/applicator"
-require_relative "greased/options"
-require_relative "greased/method_caller"
-require_relative "greased/setting"
-require_relative "greased/settings"
+require "greased/applicator"
+require "greased/options"
+require "greased/method_caller"
+require "greased/setting"
+require "greased/settings"
 
-require_relative "greased/rails" if defined? ::Rails
+require "greased/rails" if defined? ::Rails

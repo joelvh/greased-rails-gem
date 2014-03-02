@@ -1,1 +1,2 @@
-require_relative "greased"
+require "greased"
+require 'greased/rails/version'
