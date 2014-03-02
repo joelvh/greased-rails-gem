@@ -10,6 +10,10 @@ Add this line to your application's Gemfile:
 
     gem 'greased-rails'
 
+To automatically load environment variables and settings, require the the railties:
+
+    gem 'greased-rails', require: %w{greased/rails/variables greased/rails/settings}
+
 And then execute:
 
     $ bundle
