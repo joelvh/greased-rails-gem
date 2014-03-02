@@ -1,4 +1,4 @@
-# Greased Rails
+# Greased Rails [![Dependency Status](https://gemnasium.com/joelvh/greased-rails.png)](https://gemnasium.com/joelvh/greased-rails)
 
 Reusable default application settings, environment variables, and deployment tasks.
 
