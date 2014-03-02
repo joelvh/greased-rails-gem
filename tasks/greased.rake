@@ -2,8 +2,8 @@ require 'greased-rails'
 
 namespace :greased do
   namespace :env do
-    task :dump => :environment do
-      options   = Greased::Options.find(Rails.root)
+    task :dump do
+      options     = Greased::Options.find(Rails.root)
       applicator  = Greased::Applicator.new(Rails.application, options)
       
       Greased.logger.debug ""
@@ -14,7 +14,7 @@ namespace :greased do
       Greased.logger.debug "#####################################################################"
       Greased.logger.debug ""
       
-      environments  = ["development", "staging", "production"]
+      environments  = %w{test development staging production}
       longest       = environments.map(&:size).max
       
       environments.each do |env|
@@ -27,12 +27,6 @@ namespace :greased do
       Greased.logger.debug ""
       Greased.logger.debug "#####################################################################"
       Greased.logger.debug ""
-      
-    end
-  end
-  
-  namespace :heroku do
-    task :deploy, [:env] => [:environment] do |t, args|
       
     end
   end
